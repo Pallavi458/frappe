@@ -101,9 +101,19 @@ frappe.ui.form.Toolbar = class Toolbar {
 			return frappe.xcall("frappe.model.rename_doc.update_document_title", {
 				doctype,
 				docname,
+<<<<<<< HEAD
 				name: new_name,
 				title: new_title,
 				merge
+=======
+				new_name,
+				title_field,
+				old_title: this.frm.doc[title_field],
+				new_title,
+				merge,
+				freeze: true, 
+				freeze_message: __("Updating related fields...")
+>>>>>>> 45c9cc4442 (feat(toolbar.js model.js): Add freeze message when renaming document)
 			}).then(new_docname => {
 				if (new_name != docname) {
 					$(document).trigger("rename", [doctype, docname, new_docname || new_name]);
@@ -172,6 +182,7 @@ frappe.ui.form.Toolbar = class Toolbar {
 				d.show();
 				d.set_primary_action(__("Rename"), (values) => {
 					d.disable_primary_action();
+					d.hide();
 					this.rename_document_title(values.name, values.title, values.merge)
 						.then(() => {
 							d.hide();
