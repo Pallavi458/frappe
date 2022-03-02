@@ -153,3 +153,39 @@ frappe.ui.form.on('Sales Invoice',  {
 })
 
 </code></pre>`;
+
+
+
+#########################################################################################################################################################
+                                                		EXP date logic
+refresh: function(frm) {  
+    frm.fields_dict['parent_task'].get_query = function() {   
+        return {    
+            filters: {     "is_group": 1,    
+            }
+        }  
+    }    if(!frm.is_group){
+        var doc = frm.doc;   
+        if(doc.__islocal) {    
+            if(!frm.doc.exp_end_date) {
+                frm.set_value("exp_end_date",new_date);    
+            }   
+        }    
+        if(!doc.__islocal) {    
+            if(frm.perm[0].write) {
+                if(frm.doc.status!=="Completed" &&
+                frm.doc.status!=="Cancelled") {
+                frm.add_custom_button(__("Completed"), function() {
+                    frm.set_value("status", "Completed");       
+                    frm.save();      
+                });     
+            } else {      
+                frm.add_custom_button(__("Reopen"), function() { 
+                frm.set_value("status", "Open");       
+                frm.save();      
+            });     
+        }    
+    }   
+}  
+}
+										  
